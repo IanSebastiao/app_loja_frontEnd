@@ -78,6 +78,12 @@ class ProdutoViewmodel with ChangeNotifier {
       }
       _temMaisPaginas = resposta['nextPage'] != null;
       print('Tem mais paginas: $_temMaisPaginas');
-    } catch (e) {}
+    } catch (e) {
+      _errorMessage = 'Erro ao caregar produtos $e';
+      print(_errorMessage);
+    }
+
+    _isLoadingMore = false;
+    notifyListeners();
   }
 }
