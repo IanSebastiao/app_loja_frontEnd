@@ -1,4 +1,3 @@
-import 'package:app_loja/data/model/produto_model.dart' show Produto;
 import 'package:app_loja/services/api_service.dart' show ApiService;
 
 class ProdutoRepository {
