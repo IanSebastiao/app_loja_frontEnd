@@ -1,6 +1,7 @@
+import 'package:app_loja/data/model/produto_model.dart';
 import 'package:app_loja/presentation/viewmodels/produto_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' show Provider;
+import 'package:provider/provider.dart' show Consumer, Provider;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -55,7 +56,149 @@ class _HomePageState extends State<HomePage> {
               });
             },
           ),
+          const SizedBox(height: 10),
+          Expanded(child: _buildProductList()),
+          // _buildPaginationControls(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProductList() {
+    return Consumer<ProdutoViewmodel>(
+      builder: (context, viewModel, child) {
+        if (viewModel.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (viewModel.errorMessage != null) {
+          return Center(
+            child: Text(
+              viewModel.errorMessage!,
+              style: const TextStyle(fontSize: 18, color: Colors.red),
+            ),
+          );
+        }
+
+        final produtosFiltrados =
+            viewModel.produtos
+                .where(
+                  (produto) => produto.nome.toLowerCase().contains(
+                    searchQuery.toLowerCase(),
+                  ),
+                )
+                .toList();
+
+        return produtosFiltrados.isEmpty
+            ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Nenhum Produto Encontrado.',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const SizedBox(height: 18),
+                ElevatedButton(
+                  onPressed: _carregarProdutos,
+                  child: const Text('Recarregar'),
+                ),
+              ],
+            )
+            : ListView.builder(
+              itemCount: produtosFiltrados.length,
+              itemBuilder: (context, index) {
+                final produto = produtosFiltrados[index];
+                return _buildProductCard(produto, viewModel);
+              },
+            );
+      },
+    );
+  }
+
+  Widget _buildProductCard(Produto produto, ProdutoViewmodel viewModel) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          produto.nome,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          produto.descricao,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          'R\$ ${produto.preco.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12.0),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          child: const Text('Comprar'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12.0),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child:
+                        produto.imageUrl.isNotEmpty
+                            ? Image.network(
+                              produto.imageUrl,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.image,
+                                  size: 100,
+                                  color: Colors.grey,
+                                );
+                              },
+                            )
+                            : const Icon(
+                              Icons.image,
+                              size: 100,
+                              color: Colors.grey,
+                            ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
