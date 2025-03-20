@@ -1,7 +1,7 @@
-import 'package:app_loja/data/repository/produto_repository.dart';
-import 'package:app_loja/presentation/pages/home_page.dart';
-import 'package:app_loja/presentation/viewmodels/produto_viewmodel.dart';
-import 'package:app_loja/services/api_service.dart';
+import 'package:app_loja/data/repository/repository.dart';
+import 'package:app_loja/presentation/pages/homepage.dart';
+import 'package:app_loja/presentation/viewmodel/viewmodel.dart';
+import 'package:app_loja/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ProdutoViewmodel(ProdutoRepository(ApiService())),
+          create: (_) => ProdutoViewModel(ProdutoRepository(ApiServices())),
         ),
       ],
       child: const MyApp(),
@@ -25,11 +25,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Loja API',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primaryColor: Colors.blue),
       initialRoute: '/',
-      routes: {'/': (context) => const HomePage()},
+      routes: {
+        '/': (context) => const Homepage(),
+        // '/login': (context) => const LoginPage(),
+        // '/carrinho': (context) => const CarrinhoPage(),
+      },
     );
   }
 }

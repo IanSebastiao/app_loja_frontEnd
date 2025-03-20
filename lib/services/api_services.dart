@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:app_loja/data/model/produto_model.dart';
 import 'package:http/http.dart' as http;
+import '../data/models/model.dart';
 
-class ApiService {
+class ApiServices {
   final String baseUrl = 'http://127.0.0.1:8000/api';
 
   Future<Map<String, dynamic>> getProdutos({int page = 1}) async {
