@@ -3,7 +3,7 @@ import 'package:app_loja/data/model/produto_model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = 'http://127.0.0.1:8000/api/';
+  final String baseUrl = 'http://127.0.0.1:8000/api';
 
   Future<Map<String, dynamic>> getProdutos({int page = 1}) async {
     final response = await http.get(Uri.parse('$baseUrl/produtos/?page=$page'));

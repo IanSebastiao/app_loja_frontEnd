@@ -49,6 +49,7 @@ class ProdutoViewmodel with ChangeNotifier {
       int count = resposta['count'];
       int produtosPorPagina = 10;
       _totalPaginas = (count / produtosPorPagina).ceil();
+      print(_produtos);
     } catch (e) {
       print(e);
       _errorMessage = 'Erro ao carregar produtos: $e';
