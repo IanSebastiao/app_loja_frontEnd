@@ -43,4 +43,16 @@ class UserViewmodel with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void logout() {
+    _token = null;
+    _username = null;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  void clearErrorMessage() {
+    _errorMessage = null;
+    notifyListeners();
+  }
 }
