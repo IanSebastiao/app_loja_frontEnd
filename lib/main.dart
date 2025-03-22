@@ -1,5 +1,8 @@
 import 'package:app_loja/data/repository/repository.dart';
+import 'package:app_loja/data/repository/user_repository.dart';
 import 'package:app_loja/presentation/pages/homepage.dart';
+import 'package:app_loja/presentation/pages/login_page.dart';
+import 'package:app_loja/presentation/viewmodel/user_viewmodel.dart';
 import 'package:app_loja/presentation/viewmodel/viewmodel.dart';
 import 'package:app_loja/services/api_services.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ProdutoViewModel(ProdutoRepository(ApiServices())),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => UserViewmodel(UserRepository(ApiServices())),
         ),
       ],
       child: const MyApp(),
@@ -27,10 +33,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Loja API',
       theme: ThemeData(primaryColor: Colors.blue),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
         '/': (context) => const Homepage(),
-        // '/login': (context) => const LoginPage(),
+        '/login': (context) => const LoginPage(),
         // '/carrinho': (context) => const CarrinhoPage(),
       },
     );
